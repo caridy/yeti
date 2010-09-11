@@ -10,7 +10,7 @@ vows.describe("CLI").addBatch({
                 port : 8087,
                 override : "no",
                 inherit : "yes",
-                argv : ["hallo", "--override", "yes", "--bar", "baz", "--port", "8089", "reid", "--foo"]
+                argv : ["hallo", "--override", "yes", "--bar", "baz", "--port", "8089", "--delegate", "a.b.c:8090", "reid", "--foo"]
             });
         },
         "should set an argv option without a value to true" : function (config) {
@@ -38,6 +38,9 @@ vows.describe("CLI").addBatch({
         },
         "should omit argv" : function (config) {
             assert.isUndefined(config.argv);
+        },
+        "should include the hostname and port as part of delegate argv option" : function (config) {
+            assert.equal(config.delegate, "a.b.c:8090");
         }
     } 
 }).export(module);
