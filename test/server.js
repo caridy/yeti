@@ -121,6 +121,13 @@ vows.describe("HTTP Server").addBatch({
             "the document should be served unmodified" : function (body) {
                 assert.equal(body, "a{}\n");
             }
+        },
+        // tests related with delegate
+        "when executing a remote test /tests/next is requested by yetify redirect" : {
+            topic : request(200, "/tests/next"),
+            "the document should call YETI.next()" : function (body) {
+                assert.equal(body, "<script>try { parent.YETI.next(); } catch (e) {};</script>");
+            }
         }
     }
 }).export(module);
