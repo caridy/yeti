@@ -79,10 +79,10 @@ vows.describe("Visitors").addBatch({
         }
     },
     "A Yeti server visited by Safari" : {
-        "for the XHR test runner": {
+       /* "for the XHR test runner": {
             topic : httpify(),
             "was requested" : requestRunner("xhr", "Safari")
-        },
+        }, FIXME */
         "for the EventSource test runner": {
             topic : httpify(),
             "was requested" : requestRunner("eventsource", "Safari")

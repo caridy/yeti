@@ -24,6 +24,13 @@ function $yetify (config) {
 
     }
 
+    if (Y2 && !w.YAHOO.lang.JSON) { // YUI 2.x; missing Y.lang.JSON
+        var json = document.createElement("script");
+        json.src = "/inc/yui2-json.js";
+        document.body.appendChild(json);
+        return; // yui2-json will call $yetify when ready
+    }
+
     // poll for Y.Test
     if (!YTest) return w.setTimeout($yetify, 50);
 
@@ -91,6 +98,11 @@ function $yetify (config) {
         };
 
         var Runner = YTest.TestRunner || YTest;
+
+        if (Runner._root && Runner._root.results && Runner._root.results.type == "report") {
+            return submit(Runner._root);
+        }
+
         Runner.subscribe(Runner.COMPLETE_EVENT, submit);
 
     }
