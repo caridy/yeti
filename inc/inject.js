@@ -35,7 +35,12 @@ function $yetify (config) {
     if (!YTest) return w.setTimeout($yetify, 50);
 
     var href = w.location.href,
+        YETI = null;
+
+    // YETI reference might not be available for remote tests
+    try {
         YETI = parent.YETI;
+    } catch (e) {};
 
     function attachReporter (Y) {
 
@@ -52,14 +57,21 @@ function $yetify (config) {
             reporter.addField("id", self.id);
             reporter.report(data.results);
 
-            if (YETI) {
-                var cb = YETI.next,
-                    ifr = reporter._iframe;
-                if (ifr.attachEvent) {
-                    ifr.attachEvent("onload", cb);
-                } else {
-                    ifr.onload = cb;
+            // when running a remote tests, parent.YETI is not available, 
+            // is better to redirect to a page that will take care of the next step
+            var cb = function() {
+                if (YETI) {
+                    YETI.next();
+                } else if ($yetify.config.delegate) {
+                    document.location = 'http://'+$yetify.config.delegate+'/tests/next';
                 }
+            };
+
+            ifr = reporter._iframe;
+            if (ifr.attachEvent) {
+                ifr.attachEvent("onload", cb);
+            } else {
+                ifr.onload = cb;
             }
 
         };
